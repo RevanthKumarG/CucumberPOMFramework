@@ -1,22 +1,23 @@
-pipeline
-{
-agent any
-stages{
-	   stage("Run Test")
-	   {
-	      steps
-	      {
-	         bat "docker-compose up"
-	      }
-	   }
-	   stage("Bring grid down")
-	   {
-	   	   steps
-	   	   {
-	   	   	 bat "docker-compose down"
-	   	   }
-	   }
+pipeline{
+	agent any
+	stages{
 
+		stage("Start Grid"){
+			steps{
+			  bat "docker-compose up -d hub chrome firefox"
+			}
+		}
+		stage("Run Test"){
+			steps{
+				bat "docker-compose up search-module book-flight-module"
+			}
+		}
+
+		stage("Stop Grid"){
+			steps{
+				bat "docker-compose down"
+			}
+		}
 	}
 	
 }
